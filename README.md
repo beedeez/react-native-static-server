@@ -12,13 +12,15 @@ npm install react-native-static-server
 
 
 ```js
-import { multiply } from 'react-native-static-server';
+import StaticServer from 'react-native-static-server';
 
-// ...
+const server = new StaticServer(8080, '/path/to/your/www', {
+  localOnly: true,
+  keepAlive: true,
+});
 
-const result = await multiply(3, 7);
+server.start();
 ```
-
 
 ## Contributing
 
