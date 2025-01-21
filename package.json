@@ -2,20 +2,9 @@
   "name": "react-native-static-server",
   "version": "0.5.5",
   "description": "RN Static Server",
-  "source": "./src/index.ts",
-  "module": "./lib/module/index.js",
   "main": "./src/index.ts",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./lib/typescript/module/src/index.d.ts",
-        "default": "./lib/module/index.js"
-      }
-    }
-  },
   "files": [
     "src",
-    "lib",
     "android",
     "ios",
     "cpp",
@@ -36,9 +25,7 @@
     "example": "yarn workspace react-native-static-server-example",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
-    "prepare": "bob build",
-    "release": "release-it"
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib"
   },
   "keywords": [
     "react-native",
@@ -47,17 +34,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fausto95/react-native-static-server.git"
+    "url": "git+https://github.com/Beedeez/react-native-static-server.git"
   },
-  "author": "Fausto95 <faustino.kialungila@gmail.com> (https://github.com/Fausto95)",
+  "author": "Beedeez <dev@beedeez.com> (https://github.com/Beedeez)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Fausto95/react-native-static-server/issues"
+    "url": "https://github.com/Beedeez/react-native-static-server/issues"
   },
-  "homepage": "https://github.com/Fausto95/react-native-static-server#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
+  "homepage": "https://github.com/Beedeez/react-native-static-server#readme",
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.5.0",
@@ -168,10 +152,5 @@
         }
       ]
     ]
-  },
-  "create-react-native-library": {
-    "type": "legacy-module",
-    "languages": "kotlin-swift",
-    "version": "0.45.5"
   }
 }
