@@ -4,22 +4,21 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.LifecycleEventListener
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
-import java.net.ServerSocket;
+import java.io.File
+import java.io.IOException
+import java.net.InetAddress
+import java.net.NetworkInterface
+import java.net.SocketException
+import java.net.ServerSocket
 
-import android.util.Log;
+import android.util.Log
 
-
-import fi.iki.elonen.SimpleWebServer;
+import fi.iki.elonen.SimpleWebServer
 
 class StaticServerModule(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext) {
+  ReactContextBaseJavaModule(reactContext), LifecycleEventListener {
 
   private var wwwRoot: File? = null
   private var port: Int = 9999
@@ -28,6 +27,10 @@ class StaticServerModule(reactContext: ReactApplicationContext) :
   private var localPath: String = ""
   private var server: SimpleWebServer? = null
   private var url: String = ""
+
+  init {
+    reactContext.addLifecycleEventListener(this)
+  }
 
   override fun getName(): String {
     return NAME
@@ -62,7 +65,7 @@ class StaticServerModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  override fun start(portInput: String?, root: String?, localhost: Boolean?, keepAliveFlag: Boolean?, promise: Promise) {
+  fun start(portInput: String?, root: String?, localhost: Boolean?, keepAliveFlag: Boolean?, promise: Promise) {
     if (server != null) {
       promise.resolve(url)
       return
@@ -77,7 +80,7 @@ class StaticServerModule(reactContext: ReactApplicationContext) :
     wwwRoot = if (root != null && (root.startsWith("/") || root.startsWith("file:///"))) {
       File(root)
     } else {
-      File(reactContext.filesDir, root ?: "")
+      File(reactApplicationContext.filesDir, root ?: "")
     }
     localPath = wwwRoot?.absolutePath ?: ""
 
@@ -86,7 +89,8 @@ class StaticServerModule(reactContext: ReactApplicationContext) :
 
     try {
       val host = if (localhostOnly) "localhost" else getLocalIpAddress()
-      server = SimpleWebServer(host, port, wwwRoot)
+
+      server = SimpleWebServer(host, port, wwwRoot, true /* allowDirectoryListing */)
 
       url = "http://$host:$port"
       server?.start()
@@ -120,9 +124,13 @@ class StaticServerModule(reactContext: ReactApplicationContext) :
     promise.resolve(server?.isAlive ?: false)
   }
 
-  override fun onHostResume() {}
+  override fun onHostResume() {
+    Log.d(LOG_TAG, "onHostResume called")
+  }
 
-  override fun onHostPause() {}
+  override fun onHostPause() {
+    Log.d(LOG_TAG, "onHostPause called")
+  }
 
   override fun onHostDestroy() {
     stop()
@@ -130,5 +138,6 @@ class StaticServerModule(reactContext: ReactApplicationContext) :
 
   companion object {
     const val NAME = "StaticServer"
+    private const val LOG_TAG = "StaticServerModule"
   }
 }

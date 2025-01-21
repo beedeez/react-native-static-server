@@ -1,3 +1,5 @@
+import GCDWebServer
+
 @objc(StaticServer)
 class StaticServer: NSObject {
 
@@ -103,9 +105,9 @@ class StaticServer: NSObject {
         return GCDWebServerRequest(
           method: requestMethod, url: url, headers: headers, path: path, query: query)
       },
-      process: { request in
+      processBlock: { request in
         let filePath = directoryPath.appending("/").appending(
-          GCDWebServerNormalizePath(request.path.dropFirst()))
+            GCDWebServerNormalizePath(String(request.path.dropFirst())))
         let fileType = try? FileManager.default.attributesOfItem(atPath: filePath)[.type] as? String
 
         if fileType == FileAttributeType.typeDirectory.rawValue {

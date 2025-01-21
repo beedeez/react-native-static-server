@@ -72,7 +72,8 @@ class StaticServer {
       this.#origin = await NativeStaticServer.start(
         this.#port,
         this.#root ?? '',
-        { localOnly: this.#localOnly, keepAlive: this.#keepAlive }
+        this.#localOnly,
+        this.#keepAlive
       );
       return this.#origin;
     } catch (error) {
